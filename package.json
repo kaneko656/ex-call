@@ -1,0 +1,30 @@
+{
+	"name": "excall",
+	"version": "2.0.0",
+	"description": "",
+	"engines": {
+		"node": "8.9.X",
+		"npm": "5.5.X"
+	},
+	"main": "index.js",
+	"scripts": {
+		"start": "node index.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/kaneko656/excall.git"
+	},
+	"author": "",
+	"license": "",
+	"bugs": {
+		"url": "https://github.com/kaneko656/excall/issues"
+	},
+	"homepage": "https://github.com/kaneko656/excall#readme",
+	"dependencies": {
+		"express": "^4.16.3",
+		"firebase-admin": "^5.12.1",
+		"node-uuid": "^1.4.8",
+		"request": "^2.85.0",
+		"socket.io": "^2.1.0"
+	}
+}

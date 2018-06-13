@@ -1,3 +1,4 @@
+
 # Logs
 logs
 *.log
@@ -59,3 +60,10 @@ typings/
 
 # next.js build output
 .next
+
+
+/routing-server/config/config.json
+/common/config/config.json
+
+cors.json
+/apikey/
