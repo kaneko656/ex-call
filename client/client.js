@@ -37,12 +37,18 @@ exports.team = (_team) => {
 /**
  * localhostでつなげる場合
  */
-exports.local = function(target) {
+exports.local = (target) => {
     if (target) {
         localUrl = target
     }
     isLocal = true
 }
+
+exports.url = (url) => {
+    isLocal = false
+    serverUrl = url
+}
+
 
 /**
  * 独自でsocketをつなげる場合

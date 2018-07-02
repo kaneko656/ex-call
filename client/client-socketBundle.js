@@ -48,6 +48,37 @@ exports.on = (socket, query, callback = () => {}) => {
 // socket on/emit
 exports.emit = (socket, key, ...arg) => {
 
+    // socket経由で引数関数の実行
+    let onArgFunction = (emitKey, argFunction) => {
+        socket.on(emitKey, (...arg) => {
+            if (!Array.isArray(arg)) {
+                arg = [arg]
+            }
+
+            arg.forEach((body, idx) => {
+                if (body && typeof body == 'object' && typeof body.type == 'string' && body.type === 'exFunction' && body.emitKey) {
+                    body = (...a) => {
+                        socket.emit('exEmit', {
+                            key: body.emitKey,
+                            uuid: UUID.v4()
+                        }, ...a)
+                    }
+                }
+                scanObject(body, (obj) => {
+                    if (typeof obj.value == 'object' && typeof obj.value.type == 'string' && obj.value.type === 'exFunction' && obj.value.emitKey) {
+                        obj.set((...a) => {
+                            socket.emit('exEmit', {
+                                key: obj.value.emitKey,
+                                uuid: UUID.v4()
+                            }, ...a)
+                        })
+                    }
+                })
+            })
+            argFunction(...arg)
+        })
+    }
+
     // 関数はexFunctionにして渡す
     arg.forEach((body, idx) => {
         if (body && typeof body === 'function') {
@@ -55,7 +86,7 @@ exports.emit = (socket, key, ...arg) => {
             let emitKey = UUID.v4()
 
             // socket経由で引数関数の実行
-            socket.on(emitKey, argFunction)
+            onArgFunction(emitKey, argFunction)
 
             body = {
                 emitKey: emitKey,
@@ -69,7 +100,7 @@ exports.emit = (socket, key, ...arg) => {
                 let emitKey = UUID.v4()
 
                 // socket経由で引数関数の実行
-                socket.on(emitKey, argFunction)
+                onArgFunction(emitKey, argFunction)
 
                 obj.set({
                     emitKey: emitKey,
