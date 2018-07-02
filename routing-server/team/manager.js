@@ -314,6 +314,12 @@ class TeamEvent {
             let key = query.key
             let uuid = query.uuid
 
+            if(typeof key != 'string'){
+                debug('exEmit require key:string')
+                return
+            }
+
+
             // exFunctionの処理
             arg.forEach((body) => {
                 if (body && typeof body === 'object' && body.type === 'exFunction') {
