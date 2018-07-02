@@ -32,7 +32,7 @@ IoTシステム，分散システムのプロトタイプに便利です．
 ~~~
 let team = 'my' // teamごとにイベント共有が独立します．
 const Ex = require('./client')(team)
-Ex.local() // ローカルLANにサーバが立っている場合
+Ex.url(https://~~) // routing-serverのURL
 
 // ルーティングサーバとWebSocketで接続します．
 Ex.connect((ex) => {
@@ -50,7 +50,7 @@ Ex.disconnect(() => { })
 ~~~
 let team = 'my' // teamごとにイベント共有が独立します．
 const Ex = require('./client')(team)
-Ex.local() // ローカルLANにサーバが立っている場合
+Ex.url(https://~~) // routing-serverのURL
 
 // ルーティングサーバとWebSocketで接続します．
 Ex.connect((ex) => {
@@ -80,7 +80,7 @@ Ex.disconnect(() => { })
 ~~~
 let team = 'my' // teamごとにイベント共有が独立します．
 const Ex = require('./client')(team)
-Ex.local() // ローカルLANにサーバが立っている場合
+Ex.url(https://~~) // routing-serverのURL
 
 // ルーティングサーバとWebSocketで接続します．
 Ex.connect((ex) => {
@@ -99,7 +99,7 @@ Ex.disconnect(() => { })
 ~~~
 let team = 'my' // teamごとにイベント共有が独立します．
 const Ex = require('./client')(team)
-Ex.local() // ローカルLANにサーバが立っている場合
+Ex.url(https://~~) // routing-serverのURL
 
 // ルーティングサーバとWebSocketで接続します．
 Ex.connect((ex) => {
