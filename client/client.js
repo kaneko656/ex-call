@@ -7,218 +7,152 @@
 const io = require('socket.io-client')
 const UUID = require('node-uuid')
 const socketBundle = require('./client-socketBundle')
-const localConfig = require('../common/config')
 const debug = require('debug')('socket')
 
 let EventEmitter = require('events').EventEmitter
-let eventEmitter = new EventEmitter()
-eventEmitter.setMaxListeners(10000)
-
-// socket
-// 別々に呼び出しても同じsocketでは一つに
-let connected = false
-let isLocal = false
-
-let serverUrl = localConfig.SERVER_URL
-let localUrl = 'http://localhost:' + (localConfig.PORT || 8080)
-
-let socket = null
-let team = ''
-
-let isConnecting = false
-
-/**
- * team名のセット
- */
-exports.team = (_team) => {
-    team = _team
-}
-
-/**
- * localhostでつなげる場合
- */
-exports.local = (target) => {
-    if (target) {
-        localUrl = target
-    }
-    isLocal = true
-}
-
-exports.url = (url) => {
-    isLocal = false
-    serverUrl = url
-}
 
 
-/**
- * 独自でsocketをつなげる場合
- */
-exports.setSocket = (_socket) => {
-    socket = _socket
-    setEvent(socket)
-}
+class Client {
+    constructor(query) {
 
-/**
- * on
- * key, callback
- * key, filter, callback
- * {key, auth}, filter callback
- * {key, auth, filter} callback
- */
+        this.eventEmitter = new EventEmitter()
+        this.eventEmitter.setMaxListeners(10000)
 
-exports.on = (...arg) => {
-    let key, auth, filter, callback
+        this.socket = null
+        this.connected = false
+        this.isConnecting = false
 
-    if (typeof arg[1] === 'function') {
-        key = arg[0]
-        callback = arg[1]
-    } else if (typeof arg[2] === 'function') {
-        key = arg[0]
-        filter = arg[1]
-        callback = arg[2]
-    }
-    if (typeof key == 'object') {
-        auth = key.auth || undefined
-        filter = key.filter ? key.filter : filter
-        key = key.key
-        // console.log(filter)
+        this.defaultUrl = 'http://localhost:8080'
+        this.url = null
+
+        this.team = query.team
+        this.url = query.url
     }
 
-    socketBundle.on(socket, {
-        key: key,
-        auth: auth,
-        filter: filter
-    }, callback)
-}
-
-/**
- * eiit
- */
-exports.emit = (key, body, onComplete = () => {}, onError = () => {}) => {
-    socketBundle.emit(socket, key, body, onComplete, onError)
-}
-
-/**
- * connect
- *
- * callback
- * auth, callback
- * disconnectすると全てのイベントをリセットする．再接続時にconnectが再度呼ばれる
- */
-exports.connect = (...arg) => {
-    let auth, callback
-    let debugID = Math.floor(Math.random() * 10000)
-    if (typeof arg[0] === 'function') {
-        callback = arg[0]
-    } else if (typeof arg[1] === 'function') {
-        auth = arg[0]
-        callback = arg[1]
+    /**
+     * team名のセット
+     */
+    team(team) {
+        this.team = team
     }
 
-    if (socket && socket.connected) {
-        callback(module.exports)
-        return
-    } else {
-        if (!isConnecting) {
-            if (isLocal) {
-                console.log('connecting... ' + localUrl)
-                socket = io.connect(localUrl)
-            } else {
-                console.log('connecting... ' + serverUrl)
-                socket = io.connect(serverUrl)
-            }
-            setEvent(socket)
-            isConnecting = true
-        }
+    url(url) {
+        this.url = url
     }
 
-    eventEmitter.on('connect', () => {
-        debug(debugID, 'connect')
-        isConnecting = false
-        callback(new ex(module.exports, {
-            auth: auth
-        }))
-    })
-}
 
-class ex {
-    constructor(client, options = {}) {
-        this.client = client
-        this.emit = client.emit
-        this.auth = options.auth || undefined
-        this.disonenct = client.disconnect
-        this.removeListeners = client.removeListeners
+    /**
+     * 独自でsocketをつなげる場合
+     */
+    setSocket(socket) {
+        this.socket = socket
+        this._setEvent(this.socket)
     }
+
+
+    /**
+     * on
+     * key, callback
+     * key, filter, callback
+     */
 
     on(...arg) {
-        let key, auth, filter, callback
+        let key, filter, callback
+
         if (typeof arg[1] === 'function') {
             key = arg[0]
             callback = arg[1]
-            auth = this.auth
         } else if (typeof arg[2] === 'function') {
             key = arg[0]
             filter = arg[1]
             callback = arg[2]
-            auth = this.auth
         }
 
-        if (typeof key == 'object') {
-            auth = key.auth || undefined
-            filter = key.filter ? key.filter : filter
-            key = key.key
-        }
-
-        this.client.on({
+        socketBundle.on(this.socket, {
             key: key,
-            auth: auth,
             filter: filter
         }, callback)
     }
-}
 
-/**
- * ]
- */
-exports.disconnect = (callback) => {
-    eventEmitter.on('disconnect', callback)
-}
+    /**
+     * eiit
+     */
+    emit(key, body, onComplete = () => {}, onError = () => {}) {
+        socketBundle.emit(this.socket, key, body, onComplete, onError)
+    }
 
-/**
- *
- */
-exports.removeListeners = (key) => {
-    socketBundle.removeListners(socket, key)
-}
+    /**
+     *
+     */
+    disconnect(callback) {
+        this.eventEmitter.on('disconnect', callback)
+    }
 
-const setEvent = (socket) => {
-    let isFirst = true
-    socket.on('connect', () => {
-        console.log('connect')
-        debug('connect')
-        if (isFirst) {
-            isFirst = false
-            socket.emit('connectTeam', {
-                team: team
-            })
+    /**
+     *
+     */
+    removeListeners(key) {
+        socketBundle.removeListners(this.socket, key)
+    }
+
+    /**
+     * connect
+     *
+     * callback
+     * disconnectすると全てのイベントをリセットする．再接続時にconnectが再度呼ばれる
+     */
+    connect(callback = () => {}) {
+        let targetUrl = this.url || this.defaultUrl
+        if (this.socket && this.socket.connected) {
+            callback(this)
+            return
         } else {
-            debug('emit connect')
-            eventEmitter.emit('connect')
+            if (!this.isConnecting) {
+                console.log('connecting... ' + targetUrl)
+                this.socket = io.connect(targetUrl)
+                this._setEvent(this.socket)
+                this.isConnecting = true
+            }
         }
-    })
 
-    socket.on('connectedTeam', () => {
-        eventEmitter.emit('connect')
-    })
+        this.eventEmitter.on('connect', () => {
+            this.isConnecting = false
+            callback(this)
+        })
+    }
 
-    socket.on('disconnect', () => {
-        debug('disconnect')
 
-        // connectも除去される
-        socket.off()
+    _setEvent(socket) {
+        let isFirst = true
+        this.socket.on('connect', () => {
+            console.log('connect')
+            debug('connect')
+            if (isFirst) {
+                isFirst = false
+                this.socket.emit('connectTeam', {
+                    team: this.team
+                })
+            } else {
+                debug('emit connect')
+                this.eventEmitter.emit('connect')
+            }
+        })
 
-        debug('off')
-        setEvent(socket)
-        eventEmitter.emit('disconnect')
-    })
+        this.socket.on('connectedTeam', () => {
+            this.eventEmitter.emit('connect')
+        })
+
+        this.socket.on('disconnect', () => {
+            debug('disconnect')
+
+            // connectも除去される
+            this.socket.off()
+
+            debug('off')
+            this._setEvent(this.socket)
+            this.eventEmitter.emit('disconnect')
+        })
+    }
 }
+
+module.exports = Client

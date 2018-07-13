@@ -8,7 +8,6 @@ const scanObject = require('../common/scanObject')
 // socket on/emit
 exports.on = (socket, query, callback = () => {}) => {
     let key = query.key
-    let auth = query.auth
     let filter = query.filter
 
     // UUIDでonする
@@ -39,7 +38,6 @@ exports.on = (socket, query, callback = () => {}) => {
     // serverにonしていることを伝える
     socket.emit('exOn', {
         key: key,
-        auth: auth,
         filter: filter,
         uuid: onKey
     })
