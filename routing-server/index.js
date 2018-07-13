@@ -8,7 +8,8 @@ let app = require('./app')
 // team
 let manager = require('./team/manager.js')
 
-let config = require('./config')
+require('dotenv').config()
+let config = process.env
 
 app.init(config.PORT || 8080)
 
