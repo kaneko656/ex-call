@@ -67,3 +67,5 @@ typings/
 
 cors.json
 /apikey/
+
+test/
