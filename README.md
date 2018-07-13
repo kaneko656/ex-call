@@ -18,8 +18,7 @@ IoTシステム，分散システムのプロトタイプに便利です．
 `node routing-server/index.js`
 
 - デフォルトポート: 8080
-- 外部URLにする場合は common/config/config.jsonに { "SERVER_URL": "〇〇" }というデータを作ってください．
-
+- .envに PORT = 〇〇 と記載で指定ポート番号
 
 
 ## シンプルなコード例
@@ -31,8 +30,10 @@ IoTシステム，分散システムのプロトタイプに便利です．
 #### client-A
 ~~~
 let team = 'my' // teamごとにイベント共有が独立します．
-const Ex = require('./client')(team)
-Ex.url(https://~~) // routing-serverのURL
+const Ex = require('./client')({
+      team: team,
+      url: 'https://~~' // routing-serverのURL
+})
 
 // ルーティングサーバとWebSocketで接続します．
 Ex.connect((ex) => {
@@ -49,8 +50,10 @@ Ex.disconnect(() => { })
 #### client-B
 ~~~
 let team = 'my' // teamごとにイベント共有が独立します．
-const Ex = require('./client')(team)
-Ex.url(https://~~) // routing-serverのURL
+const Ex = require('./client')({
+      team: team,
+      url: 'https://~~' // routing-serverのURL
+})
 
 // ルーティングサーバとWebSocketで接続します．
 Ex.connect((ex) => {
@@ -79,8 +82,10 @@ Ex.disconnect(() => { })
 #### client-A
 ~~~
 let team = 'my' // teamごとにイベント共有が独立します．
-const Ex = require('./client')(team)
-Ex.url(https://~~) // routing-serverのURL
+const Ex = require('./client')({
+      team: team,
+      url: 'https://~~' // routing-serverのURL
+})
 
 // ルーティングサーバとWebSocketで接続します．
 Ex.connect((ex) => {
@@ -98,8 +103,10 @@ Ex.disconnect(() => { })
 #### client-B
 ~~~
 let team = 'my' // teamごとにイベント共有が独立します．
-const Ex = require('./client')(team)
-Ex.url(https://~~) // routing-serverのURL
+const Ex = require('./client')({
+      team: team,
+      url: 'https://~~' // routing-serverのURL
+})
 
 // ルーティングサーバとWebSocketで接続します．
 Ex.connect((ex) => {
