@@ -21,6 +21,7 @@
 	},
 	"homepage": "https://github.com/kaneko656/excall#readme",
 	"dependencies": {
+		"dotenv": "^6.0.0",
 		"express": "^4.16.3",
 		"node-uuid": "^1.4.8",
 		"request": "^2.85.0",
