@@ -63,7 +63,7 @@ exports.emit = (socket, key, ...arg) => {
                     }
                 }
                 scanObject(body, (obj) => {
-                    if (typeof obj.value == 'object' && typeof obj.value.type == 'string' && obj.value.type === 'exFunction' && obj.value.emitKey) {
+                    if (typeof obj.value == 'object' && obj.value && obj.value.type && typeof obj.value.type == 'string' && obj.value.type === 'exFunction' && obj.value.emitKey) {
                         obj.set((...a) => {
                             socket.emit('exEmit', {
                                 key: obj.value.emitKey,
