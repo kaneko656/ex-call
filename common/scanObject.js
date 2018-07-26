@@ -8,7 +8,7 @@
 
 module.exports = (obj, callback = () => {}) => {
     objectExpandScan(obj, obj, [], callback)
-    if (typeof obj == 'object' && obj.__proto__ && !obj.__proto__.hasOwnProperty) {
+    if (typeof obj == 'object' && typeof obj.__proto__ == 'object' && !obj.__proto__.hasOwnProperty) {
         let methods = Object.getOwnPropertyNames(obj.__proto__)
         methods.forEach((method) => {
             if (method != 'constructor') {
