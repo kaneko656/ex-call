@@ -8,30 +8,35 @@
 
 module.exports = (obj, callback = () => {}) => {
     objectExpandScan(obj, obj, [], callback)
-    if (typeof obj == 'object' && typeof obj.__proto__ == 'object' && !obj.__proto__.hasOwnProperty) {
-        let methods = Object.getOwnPropertyNames(obj.__proto__)
-        methods.forEach((method) => {
-            if (method != 'constructor') {
-                let key = method
-                let value = obj[method]
-                callback({
-                    key: key,
-                    value: value,
-                    keyPath: [],
-                    set: (updateValue) => {
-                        obj[key] = updateValue
-                    },
-                    add: (addValue, addKey) => {
-                        addKey = addKey || key
-                        obj[addKey] = addValue
-                    },
-                    remove: () => {
-                        delete obj[key]
-                    }
-                })
-            }
-        })
+    try {
+        if (typeof obj == 'object' && typeof obj.__proto__ == 'object' && !obj.__proto__.hasOwnProperty) {
+            let methods = Object.getOwnPropertyNames(obj.__proto__)
+            methods.forEach((method) => {
+                if (method != 'constructor') {
+                    let key = method
+                    let value = obj[method]
+                    callback({
+                        key: key,
+                        value: value,
+                        keyPath: [],
+                        set: (updateValue) => {
+                            obj[key] = updateValue
+                        },
+                        add: (addValue, addKey) => {
+                            addKey = addKey || key
+                            obj[addKey] = addValue
+                        },
+                        remove: () => {
+                            delete obj[key]
+                        }
+                    })
+                }
+            })
+        }
+    } catch (e) {
+        console.log(e)
     }
+
     return obj
 }
 
