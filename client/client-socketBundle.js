@@ -98,7 +98,11 @@ exports.emit = (socket, key, ...arg) => {
         }
 
         scanObject(body, (obj) => {
-            if (typeof obj.value === 'function' && obj.key.indexOf('_') != 0) {
+            if(obj.key.indexOf('_') == 0){
+                obj.remove()
+                return
+            }
+            if (typeof obj.value === 'function') {
                 let argFunction = obj.value
                 let emitKey = UUID.v4()
 
