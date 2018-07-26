@@ -60,7 +60,7 @@ exports.emit = (socket, key, ...arg) => {
                         //     key: body.emitKey,
                         //     uuid: UUID.v4()
                         // }, ...argument)
-                        module.exports.emit(socket, key, ...argument)
+                        module.exports.emit(socket, body.emitKey, ...argument)
                     }
                 }
                 scanObject(body, (obj) => {
