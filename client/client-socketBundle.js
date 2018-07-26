@@ -18,15 +18,15 @@ exports.on = (socket, query, callback = () => {}) => {
         arg.forEach((body, idx) => {
             if (body && typeof body === 'object' && body.type === 'exFunction') {
                 let exFunction = body
-                body = (...a) => {
-                    module.exports.emit(socket, exFunction.emitKey, ...a)
+                body = (...argument) => {
+                    module.exports.emit(socket, exFunction.emitKey, ...argument)
                 }
             }
             scanObject(body, (obj) => {
                 if (typeof obj.value === 'object' && obj.value && obj.value.type && obj.value.type === 'exFunction') {
                     let exFunction = obj.value
-                    obj.set((...a) => {
-                        module.exports.emit(socket, exFunction.emitKey, ...a)
+                    obj.set((...argument) => {
+                        module.exports.emit(socket, exFunction.emitKey, ...argument)
                     })
                 }
             })
@@ -55,20 +55,20 @@ exports.emit = (socket, key, ...arg) => {
 
             arg.forEach((body, idx) => {
                 if (body && typeof body == 'object' && typeof body.type == 'string' && body.type === 'exFunction' && body.emitKey) {
-                    body = (...a) => {
+                    body = (...argument) => {
                         socket.emit('exEmit', {
                             key: body.emitKey,
                             uuid: UUID.v4()
-                        }, ...a)
+                        }, ...argument)
                     }
                 }
                 scanObject(body, (obj) => {
                     if (typeof obj.value == 'object' && obj.value && obj.value.type && typeof obj.value.type == 'string' && obj.value.type === 'exFunction' && obj.value.emitKey) {
-                        obj.set((...a) => {
+                        obj.set((...argument) => {
                             socket.emit('exEmit', {
                                 key: obj.value.emitKey,
                                 uuid: UUID.v4()
-                            }, ...a)
+                            }, ...argument)
                         })
                     }
                 })

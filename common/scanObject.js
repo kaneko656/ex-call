@@ -15,7 +15,6 @@ module.exports = (obj, callback = () => {}) => {
                 if (method != 'constructor' && method.indexOf('_') != 0) {
                     let key = method
                     let value = obj[method]
-                    console.log(key, value)
                     callback({
                         key: key,
                         value: value,
