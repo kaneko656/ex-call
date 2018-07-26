@@ -98,8 +98,13 @@ exports.emit = (socket, key, ...arg) => {
         }
 
         scanObject(body, (obj) => {
-            if(obj.key.indexOf('_') == 0){
+            if (obj.key.indexOf('_') == 0) {
                 return
+            }
+            for (let i = 0; i < obj.keyPath.length; i++) {
+                if (obj.keyPath[i].indexOf('_') == 0) {
+                    return
+                }
             }
             if (typeof obj.value === 'function') {
                 let argFunction = obj.value
