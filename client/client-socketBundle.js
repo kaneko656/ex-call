@@ -75,6 +75,7 @@ exports.emit = (socket, key, ...arg) => {
                         })
                     }
                 })
+                arg[idx] = body
             })
             argFunction(...arg)
         })
