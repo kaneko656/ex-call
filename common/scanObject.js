@@ -7,9 +7,10 @@
 
 let clone = require('./clone')
 
-module.exports = (origin, callback = () => {}) => {
-    let obj = clone(origin)
-    objectExpandScan(obj, obj, [], callback)
+module.exports = (obj, callback = () => {}) => {
+
+    let origin = clone(obj)
+    objectExpandScan(clone(obj), obj, [], callback)
     if (obj && typeof obj == 'object' && typeof obj.__proto__ == 'object') {
         let methods = Object.getOwnPropertyNames(obj.__proto__)
         if (methods.indexOf('hasOwnProperty') == -1) {
