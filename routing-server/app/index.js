@@ -47,7 +47,3 @@ exports.webhook = () => {
 exports.socket = () => {
     return socket
 }
-
-exports.app = () => {
-    return app
-}
