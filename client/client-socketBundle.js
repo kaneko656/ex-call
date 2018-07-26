@@ -99,7 +99,6 @@ exports.emit = (socket, key, ...arg) => {
 
         scanObject(body, (obj) => {
             if(obj.key.indexOf('_') == 0){
-                obj.remove()
                 return
             }
             if (typeof obj.value === 'function') {
