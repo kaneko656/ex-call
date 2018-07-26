@@ -22,3 +22,6 @@ manager.init(appSocket, appApi)
 
 let localAddress = require('./utils/address')
 console.log(localAddress.toURL(config.PORT || 8080))
+
+exports.app = app.app
+exports.server = app.server

@@ -33,13 +33,8 @@ exports.init = (port) => {
     socket.init(server)
 }
 
-exports.app = () => {
-    return app
-}
-
-exports.server = () => {
-    return server
-}
+exports.app = app
+exports.server = server
 
 exports.api = () => {
     return api
