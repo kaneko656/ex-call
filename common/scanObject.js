@@ -34,6 +34,7 @@ module.exports = (obj, callback = () => {}) => {
             })
         }
     } catch (e) {
+        console.log(obj)
         console.log(e)
     }
 
