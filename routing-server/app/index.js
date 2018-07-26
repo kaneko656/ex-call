@@ -33,9 +33,6 @@ exports.init = (port) => {
     socket.init(server)
 }
 
-exports.app = app
-exports.server = server
-
 exports.api = () => {
     return api
 }
@@ -46,4 +43,13 @@ exports.webhook = () => {
 
 exports.socket = () => {
     return socket
+}
+
+exports.app = () => {
+    return app
+}
+
+
+exports.server = () => {
+    return server
 }
