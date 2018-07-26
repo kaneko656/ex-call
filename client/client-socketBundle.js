@@ -64,7 +64,7 @@ exports.emit = (socket, key, ...arg) => {
                         module.exports.emit(socket, key, ...argument)
                     }
                 }
-                scanObject(body, (obj) => {
+                body = scanObject(body, (obj) => {
                     if (typeof obj.value == 'object' && obj.value && obj.value.type && typeof obj.value.type == 'string' && obj.value.type === 'exFunction' && obj.value.emitKey) {
 
                         obj.set((...argument) => {
@@ -97,7 +97,7 @@ exports.emit = (socket, key, ...arg) => {
             }
         }
 
-        scanObject(body, (obj) => {
+        body = scanObject(body, (obj) => {
             if (obj.key.indexOf('_') == 0) {
                 return
             }
