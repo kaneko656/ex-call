@@ -11,10 +11,12 @@ module.exports = (obj, callback = () => {}) => {
     try {
         if (obj && typeof obj == 'object' && typeof obj.__proto__ == 'object' && !obj.__proto__.hasOwnProperty) {
             let methods = Object.getOwnPropertyNames(obj.__proto__)
+            console.log(methods)
             methods.forEach((method) => {
                 if (method != 'constructor') {
                     let key = method
                     let value = obj[method]
+                    console.log(key, value)
                     callback({
                         key: key,
                         value: value,
