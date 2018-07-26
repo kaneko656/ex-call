@@ -10,7 +10,7 @@ let clone = require('./clone')
 module.exports = (obj, callback = () => {}) => {
 
     let origin = clone(obj)
-    objectExpandScan(clone(obj), obj, [], callback)
+    objectExpandScan(obj, obj, [], callback)
     if (obj && typeof obj == 'object' && typeof obj.__proto__ == 'object') {
         let methods = Object.getOwnPropertyNames(obj.__proto__)
         if (methods.indexOf('hasOwnProperty') == -1) {
@@ -20,7 +20,6 @@ module.exports = (obj, callback = () => {}) => {
                     let my = origin
                     let thisMethod = origin[method]
                     let value = (...arg) => {
-                        console.log('method', method, thisMethod)
                         thisMethod.apply(my, arg)
                     }
                     callback({
