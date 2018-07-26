@@ -40,7 +40,6 @@ module.exports = (origin, callback = () => {}) => {
                 }
             })
         }
-
     }
 
     return obj
