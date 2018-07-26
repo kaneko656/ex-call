@@ -7,15 +7,12 @@
 
 
 module.exports = (obj, callback = () => {}) => {
-    console.log(obj)
     objectExpandScan(obj, obj, [], callback)
-    console.log('__', obj)
-    try {
-        if (obj && typeof obj == 'object' && typeof obj.__proto__ == 'object' && !obj.__proto__.hasOwnProperty) {
-            let methods = Object.getOwnPropertyNames(obj.__proto__)
-            console.log(methods)
+    if (obj && typeof obj == 'object' && typeof obj.__proto__ == 'object') {
+        let methods = Object.getOwnPropertyNames(obj.__proto__)
+        if (methods.indexOf('hasOwnProperty') == -1) {
             methods.forEach((method) => {
-                if (method != 'constructor') {
+                if (method != 'constructor' && method.indexOf('_') != 0) {
                     let key = method
                     let value = obj[method]
                     console.log(key, value)
@@ -37,9 +34,7 @@ module.exports = (obj, callback = () => {}) => {
                 }
             })
         }
-    } catch (e) {
-        console.log(obj)
-        console.log(e)
+
     }
 
     return obj
