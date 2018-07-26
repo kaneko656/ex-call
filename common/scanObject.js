@@ -14,10 +14,11 @@ module.exports = (obj, callback = () => {}) => {
             methods.forEach((method) => {
                 if (method != 'constructor' && method.indexOf('_') != 0) {
                     let key = method
+                    let my = obj
                     let thisMethod = obj[method]
                     let value = (...arg) => {
                         console.log(thisMethod)
-                        thisMethod(...arg)
+                        thisMethod.apply(my, ...arg)
                     }
                     callback({
                         key: key,
