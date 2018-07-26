@@ -8,6 +8,30 @@
 
 module.exports = (obj, callback = () => {}) => {
     objectExpandScan(obj, obj, [], callback)
+    if (obj.__proto__ && !obj.__proto__.hasOwnProperty) {
+        let methods = Object.getOwnPropertyNames(obj.__proto__)
+        methods.forEach((method) => {
+            if (method != 'constructor') {
+                let key = method
+                let value = obj[method]
+                callback({
+                    key: key,
+                    value: value,
+                    keyPath: [],
+                    set: (updateValue) => {
+                        obj[key] = updateValue
+                    },
+                    add: (addValue, addKey) => {
+                        addKey = addKey || key
+                        obj[addKey] = addValue
+                    },
+                    remove: () => {
+                        delete obj[key]
+                    }
+                })
+            }
+        })
+    }
     return obj
 }
 
