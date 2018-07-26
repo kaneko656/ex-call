@@ -5,9 +5,10 @@
  * keyPath  slack.channel.key だったら ['key', 'channel','slack']
  */
 
+let clone = require('./clone')
 
-module.exports = (obj, callback = () => {}) => {
-    let origin = Object.assign({}, obj)
+module.exports = (origin, callback = () => {}) => {
+    let obj = clone(origin)
     objectExpandScan(obj, obj, [], callback)
     if (obj && typeof obj == 'object' && typeof obj.__proto__ == 'object') {
         let methods = Object.getOwnPropertyNames(obj.__proto__)
