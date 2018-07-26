@@ -19,7 +19,7 @@ module.exports = (obj, callback = () => {}) => {
                     let my = origin
                     let thisMethod = origin[method]
                     let value = (...arg) => {
-                        console.log(my, thisMethod)
+                        console.log('method', method, thisMethod)
                         thisMethod.apply(my, arg)
                     }
                     callback({
