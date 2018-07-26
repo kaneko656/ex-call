@@ -7,7 +7,9 @@
 
 
 module.exports = (obj, callback = () => {}) => {
+    console.log(obj)
     objectExpandScan(obj, obj, [], callback)
+    console.log('__', obj)
     try {
         if (obj && typeof obj == 'object' && typeof obj.__proto__ == 'object' && !obj.__proto__.hasOwnProperty) {
             let methods = Object.getOwnPropertyNames(obj.__proto__)
