@@ -14,7 +14,9 @@ module.exports = (obj, callback = () => {}) => {
             methods.forEach((method) => {
                 if (method != 'constructor' && method.indexOf('_') != 0) {
                     let key = method
-                    let value = obj[method]
+                    let value = (...arg) => {
+                        obj[method](...arg)
+                    }
                     callback({
                         key: key,
                         value: value,
