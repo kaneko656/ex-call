@@ -56,19 +56,21 @@ exports.emit = (socket, key, ...arg) => {
             arg.forEach((body, idx) => {
                 if (body && typeof body == 'object' && typeof body.type == 'string' && body.type === 'exFunction' && body.emitKey) {
                     body = (...argument) => {
-                        socket.emit('exEmit', {
-                            key: body.emitKey,
-                            uuid: UUID.v4()
-                        }, ...argument)
+                        // socket.emit('exEmit', {
+                        //     key: body.emitKey,
+                        //     uuid: UUID.v4()
+                        // }, ...argument)
+                        module.exports.emit(socket, body.emitKey, ...argument)
                     }
                 }
                 scanObject(body, (obj) => {
                     if (typeof obj.value == 'object' && obj.value && obj.value.type && typeof obj.value.type == 'string' && obj.value.type === 'exFunction' && obj.value.emitKey) {
                         obj.set((...argument) => {
-                            socket.emit('exEmit', {
-                                key: obj.value.emitKey,
-                                uuid: UUID.v4()
-                            }, ...argument)
+                            // socket.emit('exEmit', {
+                            //     key: obj.value.emitKey,
+                            //     uuid: UUID.v4()
+                            // }, ...argument)
+                            module.exports.emit(socket, body.emitKey, ...argument)
                         })
                     }
                 })
