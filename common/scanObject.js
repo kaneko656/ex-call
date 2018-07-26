@@ -7,6 +7,7 @@
 
 
 module.exports = (obj, callback = () => {}) => {
+    let origin = Object.assign({}, obj)
     objectExpandScan(obj, obj, [], callback)
     if (obj && typeof obj == 'object' && typeof obj.__proto__ == 'object') {
         let methods = Object.getOwnPropertyNames(obj.__proto__)
@@ -14,8 +15,8 @@ module.exports = (obj, callback = () => {}) => {
             methods.forEach((method) => {
                 if (method != 'constructor' && method.indexOf('_') != 0) {
                     let key = method
-                    let my = obj
-                    let thisMethod = obj[method]
+                    let my = origin
+                    let thisMethod = origin[method]
                     let value = (...arg) => {
                         console.log(my, thisMethod)
                         thisMethod.apply(my, arg)
