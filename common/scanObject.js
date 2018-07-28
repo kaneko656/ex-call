@@ -29,7 +29,7 @@ module.exports = (origin, callback = () => {}) => {
                         set: (updateValue) => {
                             console.log(obj)
                             console.log(key)
-                            console.log(udpateValue)
+                            console.log(updateValue)
                             console.log(obj[key])
                             obj[key] = updateValue
                         },
