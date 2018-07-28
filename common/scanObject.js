@@ -11,7 +11,7 @@ module.exports = (origin, callback = () => {}) => {
 
     let obj = clone(origin)
     objectExpandScan(obj, obj, [], callback)
-    if (obj && typeof obj == 'object' && typeof obj.__proto__ == 'object') {
+    if (obj && typeof obj == 'object' && !Array.isArray(obj) && typeof obj.__proto__ == 'object') {
         let methods = Object.getOwnPropertyNames(obj.__proto__)
         if (methods.indexOf('hasOwnProperty') == -1) {
             methods.forEach((method) => {
